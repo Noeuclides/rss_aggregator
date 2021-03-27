@@ -8,7 +8,8 @@ class RSSParser():
         self.url = url
         self.parse = feedparser.parse(self.url)
 
-    def get_source(self):
+    @property
+    def source(self):
         feed = self.parse.get('feed')
         return {
             'link': feed.get('link'),
@@ -16,15 +17,18 @@ class RSSParser():
             'subtitle': feed.get('subtitle'),
         }
 
-    def get_articles(self):
+    @property
+    def articles(self):
         articles = []
         entries = self.parse.get('entries')
         for entry in entries:
+            print(entry.keys())
             articles.append({
                 'id': entry.get('id'),
                 'link': entry.get('link'),
                 'title': entry.get('title'),
                 'summary': entry.get('summary'),
+                'media_content': entry.get('media_content'),
                 'published': entry.get('published_parsed'),
             })
 

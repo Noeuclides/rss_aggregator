@@ -1,12 +1,8 @@
 from django.urls import path
 
-from apps.feed.views import (PropertyDelete, PropertyList,
-                                 PropertyOwnerList, PropertyRegister,
-                                 PropertyUpdate, CompanyRegister)
+from apps.feed.views import (UserFeed, FeedRegister)
 
 urlpatterns = [
-    path('list', PropertyList.as_view(), name='properties'),
-    path('detail/<int:pk>', PropertyOwnerList.as_view(), name='owner_properties'),
-    path('delete/<int:pk>', PropertyDelete.as_view(), name='feed_delete'),
-    path('register', PropertyRegister.as_view(), name='register_feed'),
+    path('detail/<int:pk>', UserFeed.as_view(), name='user_feed'),
+    path('register', FeedRegister.as_view(), name='feed_register'),
 ]

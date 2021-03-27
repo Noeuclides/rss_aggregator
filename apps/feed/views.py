@@ -20,24 +20,24 @@ class FeedList(LoginRequiredMixin, ListView):
     context_object_name = 'feed_obj'
 
     def get_queryset(self):
-        return self.model.objects.select_related('owner', 'company')
+        return self.model.objects.select_related('user', 'company')
 
 
-class FeedOwnerList(UserPassesTestMixin, DetailView):
+class UserFeed(UserPassesTestMixin, DetailView):
     model = User
-    template_name = 'feed/user_properties.html'
+    template_name = 'feed/user_feeds.html'
     login_url = reverse_lazy('users:login')
-    context_object_name = 'owner'
+    context_object_name = 'user'
 
     def test_func(self):
         return self.request.user.id == self.kwargs['pk']
 
 
     def get_context_data(self, **kwargs):
-        context = super(FeedOwnerList, self).get_context_data(**kwargs)
-        properties = feed.objects.filter(owner=self.request.user)
+        context = super(UserFeed, self).get_context_data(**kwargs)
+        properties = Feed.objects.filter(user=self.request.user)
 
-        context['feed_obj'] = properties
+        context['feeds'] = properties
 
         return context
 
@@ -50,11 +50,11 @@ class FeedRegister(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         user = User.objects.get(id=self.request.user.id)
-        form.instance.owner = user
+        form.instance.user = user
         return super(FeedRegister, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('feed:owner_properties', kwargs={'pk': self.request.user.id})
+        return reverse_lazy('feed:user_feed', kwargs={'pk': self.request.user.id})
 
 
 class feedDelete(UserPassesTestMixin, DeleteView):
@@ -65,7 +65,7 @@ class feedDelete(UserPassesTestMixin, DeleteView):
 
     def test_func(self):
         feed = self.model.objects.get(id=self.kwargs['pk'])
-        return self.request.user.id == feed.owner.id
+        return self.request.user.id == feed.user.id
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -75,5 +75,5 @@ class feedDelete(UserPassesTestMixin, DeleteView):
         return HttpResponseRedirect(success_url)
 
     def get_success_url(self):
-        return reverse_lazy('feed:owner_properties', kwargs={'pk': self.request.user.id})
+        return reverse_lazy('feed:user_properties', kwargs={'pk': self.request.user.id})
 

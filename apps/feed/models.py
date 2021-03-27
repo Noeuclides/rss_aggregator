@@ -21,4 +21,4 @@ class Feed(models.Model):
 
     def __str__(self):
         """Unicode representation of Feed."""
-        pass
+        return str(self.url)
