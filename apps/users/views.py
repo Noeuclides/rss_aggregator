@@ -14,7 +14,6 @@ from apps.users.models import User
 class Login(FormView):
     template_name = 'users/login.html'
     form_class = LoginForm
-    success_url = reverse_lazy('feed:owner_properties')
 
     @method_decorator(csrf_protect)
     def dispatch(self, request, *args, **kwargs):
@@ -31,7 +30,7 @@ class Login(FormView):
         return super(Login, self).form_invalid(form)
 
     def get_success_url(self) -> str:
-        return reverse_lazy('feed:owner_properties', kwargs={'pk': self.request.user.id})
+        return reverse_lazy('feed:user_feed', kwargs={'pk': self.request.user.id})
 
 
 def user_logout(request):
@@ -50,4 +49,4 @@ class UserRegister(CreateView):
         password = form.cleaned_data.get('password1')
         user = authenticate(username=email, password=password)
         login(self.request, user)
-        return HttpResponseRedirect(reverse('feed:owner_properties', kwargs={'pk': user.id}))
+        return HttpResponseRedirect(reverse('feed:user_feed', kwargs={'pk': user.id}))
