@@ -24,6 +24,7 @@ urlpatterns = [
     path('', home, name='home'),
     path('admin/', admin.site.urls),
     path('users/', include(('apps.users.urls', 'users'))),
+    path('feed/', include(('apps.feed.urls', 'feed'))),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns += static(
