@@ -1,0 +1,28 @@
+{% extends 'users/base.html' %}
+{% load static %}
+{% block content %}
+<div class="form-container">
+    <h4><strong>LOGIN</strong></h4>
+    <form method="POST">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+        <div>
+            {% for error in form.non_field_errors %}
+            <div class="error bg-danger rounded px-3 py-1 text-white my-1"> ⚠ {{ error }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <div class="form-group">
+            <label>{{ form.username.label }}</label>
+            {{ form.username }}
+        </div>
+        <div class="form-group">
+            <label>{{ form.password.label }}</label>
+            {{ form.password }}
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <a href="{% url 'users:register' %}" class="signup-image-link">Register</a>
+
+    </form>
+</div>
+{% endblock %}
