@@ -1,0 +1,32 @@
+{% extends 'feed/base.html' %}
+{% load static %}
+{% block content %}
+<div class="card rounded-0">
+    {% for feed in feeds %}
+    <div class="card-header">
+        <div>{{ feed.parse.source.title }}</div>
+        <div>{{ feed.parse.source.subtitle }}</div>
+    </div>
+    <div class="card-body">
+        {% with feed.parse.articles|first as article %}
+        <div class="row">
+            <div class="col-sm-3">
+                {% with article.media_content|first as media %}
+
+                <img src="{{ media.url }}" alt="" style="width: 10rem; height: 8rem;">
+                {% endwith %}
+
+            </div>
+            <div class="col-sm-9">
+                <h4>{{ article.title }}</h4>
+                <p>{{ article.summary }}</p>
+            </div>
+        </div>
+        {% endwith %}
+
+        {% endfor %}
+        <div>
+            <a href="{% url 'feed:feed_register' %}">Register url</a>
+        </div>
+    </div>
+    {% endblock %}
