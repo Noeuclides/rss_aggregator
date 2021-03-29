@@ -10,10 +10,7 @@ class FeedRegisterForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(FeedRegisterForm, self).__init__(*args, **kwargs)
-        # self.fields['type'].initial = None
         for visible in self.visible_fields():
-            print(visible.field)
-            print(visible.field.initial)
             if hasattr(visible.field.widget, 'input_type'):
                 visible.field.widget.attrs['class'] = 'form-control'
 
