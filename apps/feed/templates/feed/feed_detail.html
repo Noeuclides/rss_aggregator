@@ -1,0 +1,22 @@
+{% extends 'feed/base.html' %}
+{% load static %}
+{% block content %}
+<div class="wrapper">
+    {% for article in feed_obj.parse.articles %}
+    <div class="col">
+        <div class="card h-100">
+            {% if article.media_content %}
+            {% with article.media_content|first as media %}
+            <img src="{{ media.url }}" alt="" class="card-img-top">
+            {% endwith %}
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ article.title }}</h5>
+                <p class="card-text">{{ article.summary }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

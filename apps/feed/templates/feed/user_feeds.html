@@ -11,10 +11,11 @@
         {% with feed.parse.articles|first as article %}
         <div class="row">
             <div class="col-sm-3">
+                {% if article.media_content %}
                 {% with article.media_content|first as media %}
-
                 <img src="{{ media.url }}" alt="" style="width: 10rem; height: 8rem;">
                 {% endwith %}
+                {% endif %}
 
             </div>
             <div class="col-sm-9">
@@ -25,8 +26,5 @@
         {% endwith %}
 
         {% endfor %}
-        <div>
-            <a href="{% url 'feed:feed_register' %}">Register url</a>
-        </div>
     </div>
     {% endblock %}
