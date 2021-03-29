@@ -35,7 +35,7 @@ class Login(FormView):
 
 def user_logout(request):
     logout(request)
-    return HttpResponseRedirect('/usuario/login')
+    return HttpResponseRedirect('/user/login')
 
 
 class UserRegister(CreateView):
