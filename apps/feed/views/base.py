@@ -10,8 +10,8 @@ class BaseDetailView(DetailView):
                 for feed in Feed.objects.filter(user=self.request.user)]
 
     def feed_attr(self, feed):
-        parser = feed.parse()
-        async_resp = asyncio.run(parser.async_parser())
+        rss = feed.parse()
+        async_resp = asyncio.run(rss.parse)
         return {
             'source': async_resp.get('source'),
             'articles': async_resp.get('articles'),
