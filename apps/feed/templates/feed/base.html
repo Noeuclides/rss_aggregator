@@ -41,8 +41,8 @@
                     {% for feed in feeds %}
                     <div>
                         <a href="{% url 'feed:feed' feed.pk %}" class="d-block pl-5">
-                            <img class="feed_favicon" src="{{ feed.parse.source.link }}/favicon.ico" alt="">
-                            <span>{{ feed.parse.source.title }}</span>
+                            <img class="feed_favicon" src="{{ feed.source.link }}/favicon.ico" alt="">
+                            <span>{{ feed.source.title }}</span>
                         </a>
                     </div>
                     {% endfor %}
