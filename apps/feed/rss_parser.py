@@ -39,7 +39,7 @@ class RSSParser():
                                   bypass_bozo=True)
 
         parse['source'] = self.get_source(data.feed)
-        parse['articles'] = self.get_source(data.entries)
+        parse['articles'] = self.get_articles(data.entries)
 
         return parse
 
