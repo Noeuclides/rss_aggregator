@@ -2,11 +2,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import (CreateView, DeleteView, DetailView, ListView)
+from django.views.generic import CreateView, DeleteView, ListView
 
 from apps.feed.forms import FeedRegisterForm
 from apps.feed.models import Feed
 from apps.users.models import User
+from .base import BaseDetailView
 
 
 def home(request):
@@ -20,8 +21,7 @@ class FeedList(LoginRequiredMixin, ListView):
     context_object_name = 'feed_obj'
 
 
-
-class UserFeed(UserPassesTestMixin, DetailView):
+class UserFeed(UserPassesTestMixin, BaseDetailView):
     model = User
     template_name = 'feed/user_feeds.html'
     login_url = reverse_lazy('user:login')
@@ -30,30 +30,22 @@ class UserFeed(UserPassesTestMixin, DetailView):
     def test_func(self):
         return self.request.user.id == self.kwargs['pk']
 
-
     def get_context_data(self, **kwargs):
-        context = super(UserFeed, self).get_context_data(**kwargs)
-        feeds = Feed.objects.filter(user=self.request.user)
-
-        context['feeds'] = feeds
+        context = super().get_context_data(**kwargs)
+        context['feeds'] = self.get_feeds()
 
         return context
 
 
-class FeedDetail(DetailView):
+class FeedDetail(BaseDetailView):
     model = Feed
     template_name = 'feed/feed_detail.html'
     login_url = reverse_lazy('user:login')
-    context_object_name = 'feed_obj'
-
-    # def test_func(self):
-    #     return self.request.user.id == self.kwargs['pk']
-
 
     def get_context_data(self, **kwargs):
-        context = super(FeedDetail, self).get_context_data(**kwargs)
-        feeds = Feed.objects.filter(user=self.request.user)
-        context['feeds'] = feeds
+        context = super().get_context_data(**kwargs)
+        context['feeds'] = self.get_feeds()
+        context['feed_obj'] = self.feed_attr(context['object'])
 
         return context
 
@@ -70,10 +62,12 @@ class FeedRegister(LoginRequiredMixin, CreateView):
         return super(FeedRegister, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('feed:user_feed', kwargs={'pk': self.request.user.id})
+        return reverse_lazy(
+            'feed:user_feed', kwargs={
+                'pk': self.request.user.id})
 
 
-class feedDelete(UserPassesTestMixin, DeleteView):
+class FeedDelete(UserPassesTestMixin, DeleteView):
     model = Feed
     form_class = FeedRegisterForm
     template_name = 'feed/delete_feed.html'
@@ -86,10 +80,11 @@ class feedDelete(UserPassesTestMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         success_url = self.get_success_url()
-        feed = feed.objects.filter(pk=self.object.id)
+        feed = Feed.objects.filter(pk=self.object.id)
         feed.delete()
         return HttpResponseRedirect(success_url)
 
     def get_success_url(self):
-        return reverse_lazy('feed:user_properties', kwargs={'pk': self.request.user.id})
-
+        return reverse_lazy(
+            'feed:user_properties', kwargs={
+                'pk': self.request.user.id})

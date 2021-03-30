@@ -1,5 +1,7 @@
-import feedparser
+import asyncio
 import re
+
+from feedparser_data import RssAsync
 
 
 class RSSParser():
@@ -7,21 +9,17 @@ class RSSParser():
     def __init__(self, url, *args, **kwargs):
         super(RSSParser, self).__init__(*args, **kwargs)
         self.url = url
-        self.parse = feedparser.parse(self.url)
+        self.parse = self.async_parser()
 
-    @property
-    def source(self):
-        feed = self.parse.get('feed')
+    def get_source(self, feed):
         return {
             'link': self.clean_string('(?<!\/)\/(?!\/)', feed.get('link')),
             'title': feed.get('title'),
             'subtitle': feed.get('subtitle'),
         }
 
-    @property
-    def articles(self):
+    def get_articles(self, entries):
         articles = []
-        entries = self.parse.get('entries')
         for entry in entries:
             articles.append({
                 'id': entry.get('id'),
@@ -34,6 +32,17 @@ class RSSParser():
 
         return articles
 
+    async def async_parser(self):
+        parse = {}
+        rss = RssAsync()
+        data = await rss.get_data(url_to_parse=self.url,
+                                  bypass_bozo=True)
+
+        parse['source'] = self.get_source(data.feed)
+        parse['articles'] = self.get_source(data.entries)
+
+        return parse
+
     @staticmethod
     def clean_string(regexp, string):
         return re.split(regexp, string)[0]
@@ -42,4 +51,7 @@ class RSSParser():
 if __name__ == '__main__':
     url = 'http://rss.cnn.com/rss/cnn_topstories.rss'
     rss = RSSParser(url)
-    art = rss.get_articles()
+    # art = rss.articles
+    # print(rss.source)
+    # print(art)
+    asyncio.run(rss.parse)
