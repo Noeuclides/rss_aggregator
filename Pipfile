@@ -9,6 +9,9 @@ psycopg2-binary = "*"
 feedparser = "*"
 pycodestyle = "*"
 autopep8 = "*"
+celery = "==5.0.5"
+feedparser-data = "*"
+redis = "*"
 
 [dev-packages]
 
