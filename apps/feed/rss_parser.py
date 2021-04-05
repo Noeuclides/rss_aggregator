@@ -26,7 +26,8 @@ class RSSParser():
         for entry in entries:
             articles.append({
                 'id': entry.get('id'),
-                'link': self.clean_string('(?<!\/)\/(?!\/)', entry.get('link')),
+                'link': self.clean_string('(?<!\/)\/(?!\/)',
+                                          entry.get('link')),
                 'title': entry.get('title'),
                 'summary': self.clean_string('<+', entry.get('summary')),
                 'media_content': entry.get('media_content'),

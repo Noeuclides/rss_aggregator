@@ -36,8 +36,6 @@ class UserFeed(UserPassesTestMixin, BaseDetailView):
         context['feeds'] = self.get_feeds()
 
         # queje = update_feed.delay(context['feeds'])
-       
-        # context['feeds'] = queje.get()
 
         return context
 

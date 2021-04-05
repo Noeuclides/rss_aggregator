@@ -13,4 +13,3 @@ class FeedRegisterForm(forms.ModelForm):
         for visible in self.visible_fields():
             if hasattr(visible.field.widget, 'input_type'):
                 visible.field.widget.attrs['class'] = 'form-control'
-
