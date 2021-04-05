@@ -1,6 +1,6 @@
 from django.urls import path
 
-from apps.feed.views import (UserFeed, FeedRegister, FeedDetail)
+from apps.feed.views.views import UserFeed, FeedRegister, FeedDetail
 
 urlpatterns = [
     path('detail/<int:pk>', UserFeed.as_view(), name='user_feed'),
