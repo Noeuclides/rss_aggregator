@@ -13,9 +13,12 @@ class RSSParser():
 
     def get_source(self, feed):
         return {
+            'url': self.url,
             'link': self.clean_string('(?<!\/)\/(?!\/)', feed.get('link')),
             'title': feed.get('title'),
             'subtitle': feed.get('subtitle'),
+            'updated': feed.get('updated_parsed'),
+            'new_entries': 0
         }
 
     def get_articles(self, entries):
@@ -37,7 +40,6 @@ class RSSParser():
         rss = RssAsync()
         data = await rss.get_data(url_to_parse=self.url,
                                   bypass_bozo=True)
-
         parse['source'] = self.get_source(data.feed)
         parse['articles'] = self.get_articles(data.entries)
 

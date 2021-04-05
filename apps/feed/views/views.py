@@ -8,6 +8,7 @@ from apps.feed.forms import FeedRegisterForm
 from apps.feed.models import Feed
 from apps.users.models import User
 from .base import BaseDetailView
+from apps.feed.task import update_feed
 
 
 def home(request):
@@ -33,6 +34,10 @@ class UserFeed(UserPassesTestMixin, BaseDetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['feeds'] = self.get_feeds()
+
+        # queje = update_feed.delay(context['feeds'])
+       
+        # context['feeds'] = queje.get()
 
         return context
 
