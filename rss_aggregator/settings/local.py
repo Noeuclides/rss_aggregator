@@ -24,16 +24,3 @@ DATABASES = {
         'PORT': '',
     }
 }
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
-
-STATIC_URL = '/static/'
-STATIC_ROOT = 'static/'
-
-STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, "public/static"),
-    ]
-MEDIA_ROOT = os.path.join(BASE_DIR, 'public/media/')
-MEDIA_URL = '/media/'
