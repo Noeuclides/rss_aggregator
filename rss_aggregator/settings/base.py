@@ -12,6 +12,14 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 import os
 from pathlib import Path
+from environ import Env
+
+
+env = Env()
+env.read_env(env_file='rss_aggregator/.env')
+
+# Variable to check if the container is running
+CONTAINER_RUNNING = os.environ.get('CONTAINER_RUNNING', False)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -21,7 +29,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '6qj#jueau%0x08i&72g+v0d^la)qo($jq_t!k8(bo^u3y2jcov'
+SECRET_KEY = env('DJANGO_SECRET_KEY')
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = env('DJANGO_DEBUG', default=False)
 
 # Application definition
 
@@ -110,3 +121,27 @@ USE_TZ = True
 AUTH_USER_MODEL = 'users.User'
 
 
+# celery
+if not CONTAINER_RUNNING:
+    CELERY_BROKER_URL = 'redis://localhost:6379'
+    CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+else:
+    CELERY_BROKER_URL = 'redis://redis:6379'
+    CELERY_RESULT_BACKEND = 'redis://redis:6379'
+
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/2.1/howto/static-files/
+
+STATIC_URL = '/static/'
+STATIC_ROOT = 'static/'
+
+STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, "public/static"),
+    ]
+MEDIA_ROOT = os.path.join(BASE_DIR, 'public/media/')
+MEDIA_URL = '/media/'

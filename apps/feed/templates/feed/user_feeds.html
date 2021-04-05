@@ -4,11 +4,14 @@
 <div class="card rounded-0">
     {% for feed in feeds %}
     <div class="card-header">
-        <div>{{ feed.parse.source.title }}</div>
-        <div>{{ feed.parse.source.subtitle }}</div>
+        <div>{{ feed.source.title }}</div>
+        <div>{{ feed.source.subtitle }}</div>
+        {% if feed.source.new_entries > 0 %}
+        <span>{{ feed.source.new_entries }}</span>
+        {% endif %}
     </div>
     <div class="card-body">
-        {% with feed.parse.articles|first as article %}
+        {% with feed.articles|first as article %}
         <div class="row">
             <div class="col-sm-3">
                 {% if article.media_content %}

@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 <div class="wrapper">
-    {% for article in feed_obj.parse.articles %}
+    {% for article in feed_obj.articles %}
     <div class="col">
         <div class="card h-100">
             {% if article.media_content %}

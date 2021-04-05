@@ -9,6 +9,10 @@ psycopg2-binary = "*"
 feedparser = "*"
 pycodestyle = "*"
 autopep8 = "*"
+celery = "==5.0.5"
+feedparser-data = "*"
+redis = "*"
+django-environ = "*"
 
 [dev-packages]
 
@@ -21,3 +25,4 @@ migrate = "python manage.py migrate --settings=rss_aggregator.settings.local"
 createsuperuser = "python manage.py createsuperuser --settings=rss_aggregator.settings.local"
 server = "python manage.py runserver --settings=rss_aggregator.settings.local 0.0.0.0:8000"
 autopep8 = "autopep8 --in-place --aggressive --aggressive"
+test = "python manage.py test --settings=rss_aggregator.settings.test"

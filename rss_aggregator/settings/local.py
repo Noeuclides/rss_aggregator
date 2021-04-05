@@ -14,26 +14,18 @@ ALLOWED_HOSTS = [
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'rss_db',
-        'USER': 'rss_user',
-        'PASSWORD': 'rss_pass',
-        'HOST': 'localhost',
-        'PORT': '',
+if not CONTAINER_RUNNING:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'rss_db',
+            'USER': 'rss_user',
+            'PASSWORD': 'rss_pass',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
     }
-}
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
-
-STATIC_URL = '/static/'
-STATIC_ROOT = 'static/'
-
-STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, "public/static"),
-    ]
-MEDIA_ROOT = os.path.join(BASE_DIR, 'public/media/')
-MEDIA_URL = '/media/'
+else:
+    DATABASES = {
+        'default': env.db()
+    }
