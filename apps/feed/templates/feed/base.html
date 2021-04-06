@@ -39,7 +39,7 @@
                 </div>
                 <div class="subscriptions pb-3">
                     {% for feed in feeds %}
-                    <div>
+                    <div style="display: inline-flex;">
                         <a href="{% url 'feed:feed' feed.pk %}" class="d-block pl-5">
                             <img class="feed_favicon" src="{{ feed.source.link }}/favicon.ico" alt="">
                             <span>{{ feed.source.title }}</span>
@@ -47,6 +47,12 @@
                             <span>{{ feed.source.new_entries }}</span>
                             {% endif %}
                         </a>
+                        <span>
+                            <a href="{% url 'feed:delete_feed' feed.pk  %}" class="d-block">
+                                <ion-icon name="trash-outline"></ion-icon>
+                            </a>
+                        </span>
+                        
                     </div>
                     {% endfor %}
                 </div>
@@ -70,7 +76,7 @@
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                         data-bs-toggle="dropdown" aria-expanded="false">
-                                        Hola {{ request.user }}
+                                        Hi {{ request.user }}
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                         <li><a class="dropdown-item" href="{% url 'feed:user_feed' request.user.pk %}">home</a></li>

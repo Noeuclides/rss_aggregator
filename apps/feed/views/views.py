@@ -15,13 +15,6 @@ def home(request):
     return redirect('user:register')
 
 
-class FeedList(LoginRequiredMixin, ListView):
-    model = Feed
-    template_name = 'feed/feed_list.html'
-    login_url = reverse_lazy('user:login')
-    context_object_name = 'feed_obj'
-
-
 class UserFeed(UserPassesTestMixin, BaseDetailView):
     model = User
     template_name = 'feed/user_feeds.html'
@@ -48,7 +41,9 @@ class FeedDetail(BaseDetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['feeds'] = self.get_feeds()
-        context['feed_obj'] = self.feed_attr(context['object'])
+        url = context['object'].url
+        context['feed_obj'] = next(feed for feed in context['feeds'] if feed.get(
+            'source').get('url') == url)
 
         return context
 
@@ -89,5 +84,5 @@ class FeedDelete(UserPassesTestMixin, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy(
-            'feed:user_properties', kwargs={
+            'feed:user_feed', kwargs={
                 'pk': self.request.user.id})

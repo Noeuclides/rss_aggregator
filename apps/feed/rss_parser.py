@@ -41,8 +41,8 @@ class RSSParser():
         rss = RssAsync()
         data = await rss.get_data(url_to_parse=self.url,
                                   bypass_bozo=True)
-        parse['source'] = self.get_source(data.feed)
-        parse['articles'] = self.get_articles(data.entries)
+        parse['source'] = self.get_source(data.get('feed'))
+        parse['articles'] = self.get_articles(data.get('entries'))
 
         return parse
 

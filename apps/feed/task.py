@@ -20,13 +20,7 @@ def update_feed(feeds):
 
         updated = check_feed.get('updated')
         actual = source.get('updated')
-        print(type(updated), type(actual))
         if updated != actual:
-            print("si señor")
-            print(updated)
-            print(actual)
             source['new_entries'] += 1
-        else:
-            print("no señor: ", updated, actual)
 
     return feeds
