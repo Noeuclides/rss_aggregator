@@ -1,3 +1,4 @@
+import asyncio
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
@@ -40,12 +41,32 @@ class FeedDetail(BaseDetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['feeds'] = self.get_feeds()
+        # loop = asyncio.get_event_loop()
+        # asyncio.set_event_loop(asyncio.SelectorEventLoop())
+        results = asyncio.run(self.get_feeds())
+        # context['feeds'] = self.get_feeds()
+        # results = loop.run_until_complete(self.get_feeds())
+        print(results)
+
         url = context['object'].url
         context['feed_obj'] = next(feed for feed in context['feeds'] if feed.get(
             'source').get('url') == url)
 
         return context
+
+    # async def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     print("afavad")
+    #     loop = asyncio.get_event_loop()
+    #     coroutine_parse = await self.get_feeds()
+    #     a = loop.run_until_complete(coroutine_parse)
+    #     print(a)
+    #     context['feeds'] = []
+    #     url = context['object'].url
+    #     context['feed_obj'] = next(feed for feed in context['feeds'] if feed.get(
+    #         'source').get('url') == url)
+
+    #     return context
 
 
 class FeedRegister(LoginRequiredMixin, CreateView):

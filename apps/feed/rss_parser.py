@@ -6,10 +6,10 @@ from feedparser_data import RssAsync
 
 class RSSParser():
 
-    def __init__(self, url, *args, **kwargs):
+    async def __init__(self, url, *args, **kwargs):
         super(RSSParser, self).__init__(*args, **kwargs)
         self.url = url
-        self.parse = self.async_parser()
+        self.parse = await self.async_parser()
 
     def get_source(self, feed):
         return {
